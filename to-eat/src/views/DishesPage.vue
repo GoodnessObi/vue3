@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import NewDishForm from '../components/NewDishForm.vue'
+import NewDishForm from '@/components/NewDishForm.vue'
 import DishCard from '../components/DishCard.vue'
 import SideMenu from '../components/SideMenu.vue'
 import type { Dish } from '@/types'
