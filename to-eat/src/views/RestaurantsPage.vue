@@ -6,9 +6,10 @@ import { computed, defineComponent, onMounted, ref } from 'vue'
 import type { Restaurant } from '@/types'
 import { useRoute } from 'vue-router'
 import { useRestaurantStore } from '@/stores/RestaurantStore'
+import { storeToRefs } from 'pinia'
 
 const restaurantStore = useRestaurantStore()
-const restaurantList = restaurantStore.list
+const restaurantList = storeToRefs(restaurantStore).list
 const filterText = ref<string>('')
 const showNewForm = ref<boolean>(false)
 
@@ -17,16 +18,18 @@ const updateFilterText = (event: KeyboardEvent) => {
 }
 
 const filteredRestaurantList = computed((): Restaurant[] => {
-  return restaurantList.filter((restaurant) => {
+  return restaurantList.value.filter((restaurant) => {
     if (restaurant.name) {
       return restaurant.name.toLowerCase().includes(filterText.value.toLowerCase())
     } else {
-      return restaurantList
+      return restaurantList.value
     }
   })
 })
 
-const numberOfRestaurants = filteredRestaurantList.value.length
+const numberOfRestaurants = computed((): number => {
+  return filteredRestaurantList.value.length
+})
 
 const addRestaurant = (payload: Restaurant) => {
   restaurantStore.addRestaurant(payload)
